@@ -219,6 +219,95 @@ public class SortingAnalyzerApp extends JFrame {
         }
     }
 
+    private void mergeSortWithVisualization(List<Double> values) {
+        if (values.size() <= 1) return;
+        
+        int mid = values.size() / 2;
+        List<Double> left = new ArrayList<>(values.subList(0, mid));
+        List<Double> right = new ArrayList<>(values.subList(mid, values.size()));
+
+        mergeSortWithVisualization(left);
+        mergeSortWithVisualization(right);
+        merge(values, left, right);
+        visualizationUpdate(values);
+    }
+
+    private void merge(List<Double> values, List<Double> left, List<Double> right) {
+        int i = 0, j = 0, k = 0;
+        while (i < left.size() && j < right.size()) {
+            if (left.get(i) <= right.get(j)) {
+                values.set(k++, left.get(i++));
+            } else {
+                values.set(k++, right.get(j++));
+            }
+        }
+        while (i < left.size()) values.set(k++, left.get(i++));
+        while (j < right.size()) values.set(k++, right.get(j++));
+    }
+
+    private void quickSortWithVisualization(List<Double> values) {
+        quickSort(values, 0, values.size() - 1);
+    }
+
+    private void quickSort(List<Double> values, int low, int high) {
+        if (low < high) {
+            int pi = partition(values, low, high);
+            quickSort(values, low, pi - 1);
+            quickSort(values, pi + 1, high);
+            visualizationUpdate(values);
+        }
+    }
+
+    private int partition(List<Double> values, int low, int high) {
+        double pivot = values.get(high);
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (values.get(j) < pivot) {
+                i++;
+                double temp = values.get(i);
+                values.set(i, values.get(j));
+                values.set(j, temp);
+            }
+        }
+        double temp = values.get(i + 1);
+        values.set(i + 1, values.get(high));
+        values.set(high, temp);
+        return i + 1;
+    }
+
+    private void heapSortWithVisualization(List<Double> values) {
+        int n = values.size();
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(values, n, i);
+            visualizationUpdate(values);
+        }
+        for (int i = n - 1; i > 0; i--) {
+            double temp = values.get(0);
+            values.set(0, values.get(i));
+            values.set(i, temp);
+            heapify(values, i, 0);
+            visualizationUpdate(values);
+        }
+    }
+
+    private void heapify(List<Double> values, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && values.get(left) > values.get(largest))
+            largest = left;
+        if (right < n && values.get(right) > values.get(largest))
+            largest = right;
+
+        if (largest != i) {
+            double swap = values.get(i);
+            values.set(i, values.get(largest));
+            values.set(largest, swap);
+            heapify(values, n, largest);
+        }
+    }
+
     // Visualization Update
     private void visualizationUpdate(List<Double> values) {
         try {
