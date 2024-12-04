@@ -1,10 +1,12 @@
 package view;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.*;
 import java.util.List;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -178,5 +180,30 @@ public class SortingAnalyzerApp extends JFrame {
                 updateVisualization(values);
             });
         }).start();
+    }
+
+    private void updateVisualization(List<Double> values) {
+        dataSeries.clear();
+        for (int i = 0; i < values.size(); i++) {
+            dataSeries.add(i, values.get(i));
+        }
+    }
+
+
+    // Visualization Update
+    private void visualizationUpdate(List<Double> values) {
+        try {
+            Thread.sleep(50);
+            SwingUtilities.invokeLater(() -> updateVisualization(values));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void main(String[] args) {
+        FlatIntelliJLaf.setup();
+        SwingUtilities.invokeLater(() -> {
+            new SortingAnalyzerApp().setVisible(true);
+        });
     }
 }
