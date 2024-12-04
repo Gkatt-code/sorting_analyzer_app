@@ -189,6 +189,35 @@ public class SortingAnalyzerApp extends JFrame {
         }
     }
 
+    // Sorting algorithms with visualization
+    private void insertionSortWithVisualization(List<Double> values) {
+        for (int i = 1; i < values.size(); i++) {
+            double key = values.get(i);
+            int j = i - 1;
+            while (j >= 0 && values.get(j) > key) {
+                values.set(j + 1, values.get(j));
+                j--;
+            }
+            values.set(j + 1, key);
+            if (i % 10 == 0) visualizationUpdate(values);
+        }
+    }
+
+    private void shellSortWithVisualization(List<Double> values) {
+        int n = values.size();
+        for (int gap = n/2; gap > 0; gap /= 2) {
+            for (int i = gap; i < n; i++) {
+                double temp = values.get(i);
+                int j = i;
+                while (j >= gap && values.get(j - gap) > temp) {
+                    values.set(j, values.get(j - gap));
+                    j -= gap;
+                }
+                values.set(j, temp);
+                if (i % 10 == 0) visualizationUpdate(values);
+            }
+        }
+    }
 
     // Visualization Update
     private void visualizationUpdate(List<Double> values) {
